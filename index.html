@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wetterbasierte Aufgaben</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <h1 class="animated-heading">Wetterbasierte Aufgaben</h1>
+        <div id="weatherInfo">
+            <img id="weatherIcon" alt="Weather Icon">
+            <span id="weatherText"></span>
+        </div>
+
+        <div id="matchingTasks">
+            <h2>Passende Aufgaben</h2>
+            <h4>Deine Aufgaben abhängig vom aktuellen Wetter:</h4>
+            <div id="taskGrid" class="task-grid"></div>
+            <details>
+                <summary class="summary">Alle Aufgaben anzeigen</summary>
+                <ul id="taskList"></ul>
+            </details>
+        </div>
+
+        <button id="addTaskButton">Aufgabe Hinzufügen</button>
+
+        <div id="taskForm" style="display:none;">
+            <h2>Neue Aufgabe</h2>
+            <input type="text" id="taskName" placeholder="Aufgabe">
+            <label for="tempSlider">Mindesttemperatur (°C):</label>
+            <input type="range" id="tempSlider" min="0" max="40" value="20">
+            <span id="tempValue">20°C</span>
+            <label for="rainSelect">Regenstatus:</label>
+            <select id="rainSelect">
+                <option value="none">Kein Regen</option>
+                <option value="light">Leichter Regen</option>
+                <option value="rain">Regen</option>
+            </select>
+            <button id="saveTask">Speichern</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
