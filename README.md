@@ -26,6 +26,14 @@ Die **Wetterbasierte Aufgaben App** ist eine Progressive Web App (PWA), die es B
 
 3. **Aufgabe löschen**:
     - Klicken Sie auf den **"Löschen"**-Button neben der Aufgabe, um sie zu entfernen.
+    - 
+## Anzeige der Aufgaben
+
+Die Anzeige der Aufgaben basiert auf den aktuellen Wetterbedingungen. Die App unterscheidet zwischen drei Regenstatus: **Kein Regen**, **Leichter Regen** und **Regen**.
+
+- **Kein Regen**: Wenn es nicht regnet, werden alle Aufgaben angezeigt, die nicht bei Regen durchgeführt werden sollen.
+- **Leichter Regen**: Wenn es leicht regnet, werden die Aufgaben angezeigt, die bei leichtem Regen durchgeführt werden können. Aufgaben, die nur bei starkem Regen durchgeführt werden sollen, werden nicht angezeigt.
+- **Regen**: Wenn es stark regnet, werden die Aufgaben angezeigt, die bei Regen durchgeführt werden können. Aufgaben, die bei leichtem Regen durchgeführt werden können, werden ebenfalls angezeigt, da sie auch bei starkem Regen relevant sein können (z.B. das Wegräumen von Gegenständen, Wäsche abhängen...).
 
 ## Technologien
 
@@ -44,6 +52,5 @@ Die App ist als PWA konfiguriert und enthält die folgenden Dateien:
 
 ## Beispielbild
 
-![screenshot](https://github.com/user-attachments/assets/68b593d4-14cc-4659-a9fb-8abb642a78fc)
-
+<img src="https://github.com/user-attachments/assets/68b593d4-14cc-4659-a9fb-8abb642a78fc" alt="screenshot" width="300"/>
 
