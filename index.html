@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wetterbasierte Aufgaben</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="/manifest.json">
 </head>
 <body>
     <div id="app">
@@ -31,9 +32,12 @@
         <div id="taskForm" style="display:none;">
             <h2>Neue Aufgabe</h2>
             <input type="text" id="taskName" placeholder="Aufgabe">
-            <label for="tempSlider">Mindesttemperatur (°C):</label>
-            <input type="range" id="tempSlider" min="0" max="40" value="20">
+            <input type="text" id="taskDescription" placeholder="Beschreibung"> <!-- Neue Beschreibungseingabe -->
+            <label for="tempSlider">Mindesttemperatur:</label>
             <span id="tempValue">20°C</span>
+            <input type="range" id="tempSlider" min="0" max="40" value="20">
+            
+
             <label for="rainSelect">Regenstatus:</label>
             <select id="rainSelect">
                 <option value="none">Kein Regen</option>
@@ -42,7 +46,13 @@
             </select>
             <button id="saveTask">Speichern</button>
         </div>
+        <footer>
+            <p>2024 MiniHackathon Challenge 1</p>
+            <p>von Kevin Böhme</p>
+            <a href="https://github.com">Github</a>
+            </footer>
     </div>
+    
     <script src="script.js"></script>
 </body>
 </html>

@@ -1,9 +1,8 @@
-
 document.addEventListener('DOMContentLoaded', async () => {
     const weatherInfo = document.getElementById('weatherInfo');
     const weatherIcon = document.getElementById('weatherIcon');
     const weatherText = document.getElementById('weatherText');
-    
+
     const addTaskButton = document.getElementById('addTaskButton');
     const taskForm = document.getElementById('taskForm');
     const saveTaskButton = document.getElementById('saveTask');
@@ -13,6 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const tempValue = document.getElementById('tempValue');
     const rainSelect = document.getElementById('rainSelect');
     const taskNameInput = document.getElementById('taskName');
+    const taskDescriptionInput = document.getElementById('taskDescription'); // Neue Beschreibungseingabe
     let currentWeather = {};
 
     // Wetterdaten beim Laden der Seite abrufen mit Geolocation
@@ -45,14 +45,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Klick-Ereignislistener zum Speichern der Aufgabe
     saveTaskButton.addEventListener('click', () => {
         const taskName = taskNameInput.value;
+        const taskDescription = taskDescriptionInput.value; // Neue Beschreibungseingabe
         const minTemp = tempSlider.value;
         const rainStatus = rainSelect.value;
         const completed = false;
-        const task = { name: taskName, minTemp, rainStatus, completed };
+        const task = { name: taskName, description: taskDescription, minTemp, rainStatus, completed }; // Beschreibung hinzugefügt
         saveTask(task);
         renderTask(task);
         taskForm.style.display = 'none';
         taskNameInput.value = '';
+        taskDescriptionInput.value = ''; // Beschreibung zurücksetzen
         tempSlider.value = 20;
         tempValue.textContent = '20°C';
         rainSelect.value = 'none';
@@ -61,10 +63,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Funktion zum Rendern einer Aufgabe in der Aufgabenliste
     function renderTask(task) {
-        const { name, minTemp, rainStatus, completed } = task;
+        const { name, description, minTemp, rainStatus, completed } = task; // Beschreibung hinzugefügt
 
         const li = document.createElement('li');
-        li.innerHTML = `${name} - Mindesttemperatur: ${minTemp}°C, Regenstatus: ${rainStatus}
+        li.innerHTML = `${name} - ${description} - Mindesttemperatur: ${minTemp}°C, Regenstatus: ${rainStatus}
                         <button class="delete-button">Löschen</button>`;
         li.dataset.minTemp = minTemp;
         li.dataset.rainStatus = rainStatus;
@@ -87,7 +89,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Funktion zum Rendern einer Aufgabe in der Aufgaben-Kachel
     function renderTaskCard(task, animate = true) {
-        const { name, minTemp, rainStatus, completed } = task;
+        const { name, description, minTemp, rainStatus, completed } = task; // Beschreibung hinzugefügt
 
         if (!isTaskSuitable(minTemp, rainStatus)) {
             return; // Überspringe das Rendern dieser Karte, wenn die Aufgabe nicht geeignet ist
@@ -98,7 +100,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (animate) {
             card.classList.add('new-task-animation');
         }
-        card.innerHTML = `${name} `;
+        card.innerHTML = `${name} - ${description} `; // Beschreibung hinzugefügt
         card.dataset.minTemp = minTemp;
         card.dataset.rainStatus = rainStatus;
         card.dataset.name = name;
@@ -251,7 +253,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 hasSuitableTasks = true;
             }
         });
-    
+
         // Blende das matchingTasks-Element basierend auf der Anwesenheit geeigneter Aufgaben ein oder aus
         const matchingTasks = document.getElementById('matchingTasks');
         if (hasSuitableTasks) {
@@ -260,4 +262,55 @@ document.addEventListener('DOMContentLoaded', async () => {
             matchingTasks.style.display = 'none';
         }
     }
+});
+
+// PWA: Service Worker registrieren
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+    .then((registration) => {
+        console.log('Service Worker registriert mit Scope:', registration.scope);
+    }).catch((error) => {
+        console.error('Service Worker Registrierung fehlgeschlagen:', error);
+    });
+}
+
+// Installationsaufforderung 
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Verhindern, dass der Standarddialog angezeigt wird
+    e.preventDefault();
+    deferredPrompt = e;
+    const installButton = document.createElement('button');
+    installButton.textContent = 'Als App Installieren';
+    installButton.style.position = 'fixed';
+    installButton.style.bottom = '20px';
+    installButton.style.left = '50%';
+    installButton.style.transform = 'translateX(-50%)';
+    installButton.style.padding = '10px 20px';
+    installButton.style.backgroundColor = '#50565c';
+    installButton.style.color = '#ffffff';
+    installButton.style.border = 'none';
+    installButton.style.borderRadius = '5px';
+    installButton.style.cursor = 'pointer';
+    document.body.appendChild(installButton);
+
+    installButton.addEventListener('click', () => {
+       
+        deferredPrompt.prompt();
+   
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('Benutzer hat die Installation akzeptiert');
+            } else {
+                console.log('Benutzer hat die Installation abgelehnt');
+            }
+            deferredPrompt = null;
+            document.body.removeChild(installButton);
+        });
+    });
+});
+
+window.addEventListener('appinstalled', (event) => {
+    console.log('PWA wurde installiert', event);
 });
