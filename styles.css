@@ -1,4 +1,4 @@
-/* styles.css */
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
@@ -93,10 +93,6 @@ h2 {
     margin-top: 30px;
 }
 
-.summary {
-    margin-top: 80px;
-}
-
 #weatherInfo {
     margin-bottom: 30px;
     padding: 10px;
@@ -113,11 +109,18 @@ h2 {
     padding: 10px;
 }
 
+#allTasks{
+    border-style: dashed;
+    border-radius: 4px;
+    margin-top: 30px;
+    padding: 10px;
+}
+
 .animated-heading {
     font-size: 1.5rem;
     color: #000000;
     overflow: hidden;
-    border-right: .15em solid orange;
+   
     white-space: nowrap; 
     margin: 0 auto; 
     letter-spacing: .15em;
