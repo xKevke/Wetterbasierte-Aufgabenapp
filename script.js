@@ -278,9 +278,10 @@ if ('serviceWorker' in navigator) {
 let deferredPrompt;
 
 window.addEventListener('beforeinstallprompt', (e) => {
-    // Verhindern, dass der Standarddialog angezeigt wird
-    e.preventDefault();
+    // Standarddialog wird zugelassen
     deferredPrompt = e;
+
+    // Erstellen eines benutzerdefinierten Installationsbuttons
     const installButton = document.createElement('button');
     installButton.textContent = 'Als App Installieren';
     installButton.style.position = 'fixed';
@@ -296,9 +297,11 @@ window.addEventListener('beforeinstallprompt', (e) => {
     document.body.appendChild(installButton);
 
     installButton.addEventListener('click', () => {
-       
+        // Verhindern, dass der Standarddialog angezeigt wird
+        e.preventDefault();
+        // Zeigen des benutzerdefinierten Installationsdialogs
         deferredPrompt.prompt();
-   
+
         deferredPrompt.userChoice.then((choiceResult) => {
             if (choiceResult.outcome === 'accepted') {
                 console.log('Benutzer hat die Installation akzeptiert');
@@ -311,6 +314,43 @@ window.addEventListener('beforeinstallprompt', (e) => {
     });
 });
 
-window.addEventListener('appinstalled', (event) => {
-    console.log('PWA wurde installiert', event);
+window.addEventListener('appinstalled', () => {
+    console.log('PWA wurde installiert');
 });
+
+// Überprüfen, ob es sich um ein iOS-Gerät handelt
+const isIos = () => {
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    return /iphone|ipad|ipod/.test(userAgent);
+};
+
+// Überprüfen, ob die App in Safari auf einem iOS-Gerät geöffnet wird
+const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
+if (isIos() && !isInStandaloneMode()) {
+    const iosInstallMessage = document.createElement('div');
+    iosInstallMessage.innerHTML = `
+        <p>Um diese App zu installieren, tippen Sie auf das <strong>Teilen</strong> Symbol und dann <strong>Zum Home-Bildschirm</strong></p>
+        <button id="closeIosInstallMessage" style="position: absolute; top: 0px; left: 70px; background: none; border: none; color: #ffffff; font-size: 20px; cursor: pointer;">&times;</button>
+    `;
+    iosInstallMessage.style.position = 'fixed';
+    iosInstallMessage.style.bottom = '20px';
+    iosInstallMessage.style.left = '50%';
+    iosInstallMessage.style.transform = 'translateX(-50%)';
+    iosInstallMessage.style.padding = '10px 20px';
+    iosInstallMessage.style.backgroundColor = '#50565c';
+    iosInstallMessage.style.color = '#ffffff';
+    iosInstallMessage.style.border = 'none';
+    iosInstallMessage.style.borderRadius = '5px';
+    iosInstallMessage.style.textAlign = 'center';
+    iosInstallMessage.style.zIndex = '1000';
+    iosInstallMessage.style.maxWidth = '300px';
+    iosInstallMessage.style.boxShadow = '0px 0px 10px rgba(0, 0, 0, 0.1)';
+    iosInstallMessage.style.paddingTop = '30px'; // Hinzugefügt, um Platz für das Schließen-Button zu schaffen
+    document.body.appendChild(iosInstallMessage);
+
+    const closeIosInstallMessage = document.getElementById('closeIosInstallMessage');
+    closeIosInstallMessage.addEventListener('click', () => {
+        iosInstallMessage.style.display = 'none';
+    });
+}
