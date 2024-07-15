@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Überprüfe die genauen Regenbedingungen
         if (rainStatus === 'none' && currentRain > 0) {
             return false;
-        } else if (rainStatus === 'light' && currentRain > 2) {
+        } else if (rainStatus === 'light' && currentRain === 0) {
             return false;
         } else if (rainStatus === 'rain' && currentRain <= 2) {
             return false;
