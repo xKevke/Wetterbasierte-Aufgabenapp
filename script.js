@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const rainSelect = document.getElementById('rainSelect');
     const taskNameInput = document.getElementById('taskName');
     const taskDescriptionInput = document.getElementById('taskDescription'); // Neue Beschreibungseingabe
+    
     let currentWeather = {};
 
     // Wetterdaten beim Laden der Seite abrufen mit Geolocation
@@ -25,11 +26,27 @@ document.addEventListener('DOMContentLoaded', async () => {
             displayWeather(weatherData);
             // Aufgaben aus dem LocalStorage laden
             loadTasks();
-        }, (error) => {
+        }, async (error) => {
             console.error("Geolocation error:", error);
+            // Fallback-Koordinaten für Berlin
+            const berlinLatitude = 52.5200;
+            const berlinLongitude = 13.4050;
+            const weatherData = await fetchWeather(berlinLatitude, berlinLongitude);
+            currentWeather = weatherData;
+            displayWeather(weatherData);
+            // Aufgaben aus dem LocalStorage laden
+            loadTasks();
         });
     } else {
         console.error("Geolocation wird von diesem Browser nicht unterstützt.");
+        // Fallback-Koordinaten für Berlin
+        const berlinLatitude = 52.5200;
+        const berlinLongitude = 13.4050;
+        const weatherData = await fetchWeather(berlinLatitude, berlinLongitude);
+        currentWeather = weatherData;
+        displayWeather(weatherData);
+        // Aufgaben aus dem LocalStorage laden
+        loadTasks();
     }
 
     // Slider-Ereignislistener zum Aktualisieren des Temperaturwertes
@@ -331,7 +348,7 @@ if (isIos() && !isInStandaloneMode()) {
     const iosInstallMessage = document.createElement('div');
     iosInstallMessage.innerHTML = `
         <p>Um diese App zu installieren, tippen Sie auf das <strong>Teilen</strong> Symbol und dann <strong>Zum Home-Bildschirm</strong></p>
-        <button id="closeIosInstallMessage" style="position: absolute; top: 0px; left: 70px; background: none; border: none; color: #ffffff; font-size: 20px; cursor: pointer;">&times;</button>
+        <button id="closeIosInstallMessage" style="position: absolute; top: 0px; right: 10px; background: none; border: none; color: #ffffff; font-size: 20px; cursor: pointer;">&times;</button>
     `;
     iosInstallMessage.style.position = 'fixed';
     iosInstallMessage.style.bottom = '20px';
